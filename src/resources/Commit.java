@@ -3,11 +3,9 @@ package resources;
 import java.time.LocalDate;
 
 public class Commit {
-    private final String hash;
     private final LocalDate date;
 
-    public Commit(String hash, LocalDate date) {
-        this.hash = hash;
+    public Commit(LocalDate date) {
         this.date = date;
     }
 

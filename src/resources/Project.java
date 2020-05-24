@@ -163,16 +163,12 @@ public class Project {
         CommandLine command = new CommandLine();
         String output;
         String[] lines;
-        String[] info;
 
         logger.log(Level.FINE, "Extracting Commits");
 
-        int index=0;
         for (Ticket ticket : this.tickets) {
-            index++;
-            System.out.println("Ticket " + index + "/" + this.tickets.size());
 
-            command.setCommand("git log --date=iso-strict --grep=" + ticket.getKey() + " -F --pretty=format:'%H'BREAK'%cd'END | sort -r", "/home/alex/code/ISW2/" + this.name);
+            command.setCommand("git log --date=iso-strict --grep=" + ticket.getKey() + " -F --pretty=format:'%cd'END | sort -r", "/home/alex/code/ISW2/" + this.name);
             output = command.executeCommand();
 
             if (output.equals("")) {
@@ -182,14 +178,13 @@ public class Project {
             this.taggedTickets++;
 
             lines = output.split("END", 0);
-            info = lines[0].split("BREAK", 0);
 
-            if (info.length == 2) {
-                ticket.setCommit(new Commit(info[0], LocalDate.parse(info[1].substring(0,10))));
-                if (LocalDate.parse(info[1].substring(0,10)).isBefore(this.startDate)) {
-                    this.startDate = LocalDate.parse(info[1].substring(0,10));
-                } else if (LocalDate.parse(info[1].substring(0,10)).isAfter(this.endDate)) {
-                    this.endDate = LocalDate.parse(info[1].substring(0,10));
+            if (lines.length == 1) {
+                ticket.setCommit(new Commit(LocalDate.parse(lines[0].substring(0,10))));
+                if (LocalDate.parse(lines[0].substring(0,10)).isBefore(this.startDate)) {
+                    this.startDate = LocalDate.parse(lines[0].substring(0,10));
+                } else if (LocalDate.parse(lines[0].substring(0,10)).isAfter(this.endDate)) {
+                    this.endDate = LocalDate.parse(lines[0].substring(0,10));
                 }
             }
         }
@@ -213,8 +208,6 @@ public class Project {
             this.totalTickets = json.getInt("total");
 
             for (; i < this.totalTickets && i < j; i++) {
-
-                System.out.println("Ticket " + i + "/" + this.totalTickets);
 
                 logger.log(Level.FINE, "{}", i+1 + "/" + this.totalTickets);
 
