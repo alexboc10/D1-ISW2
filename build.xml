@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="d1-isw2" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.klib"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module D1-ISW2 -->
+  
+  <dirname property="module.d1-isw2.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.d1-isw2" value="-encoding UTF-8 -source 11 -target 11 ${compiler.args}"/>
+  
+  <property name="d1-isw2.output.dir" value="${module.d1-isw2.basedir}/out/production/D1-ISW2"/>
+  <property name="d1-isw2.testoutput.dir" value="${module.d1-isw2.basedir}/out/test/D1-ISW2"/>
+  
+  <path id="d1-isw2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="d1-isw2.module.production.classpath">
+    <pathelement location="${basedir}/json-20190722.jar"/>
+  </path>
+  
+  <path id="d1-isw2.runtime.production.module.classpath">
+    <pathelement location="${d1-isw2.output.dir}"/>
+    <pathelement location="${basedir}/json-20190722.jar"/>
+  </path>
+  
+  <path id="d1-isw2.module.classpath">
+    <pathelement location="${d1-isw2.output.dir}"/>
+    <pathelement location="${basedir}/json-20190722.jar"/>
+  </path>
+  
+  <path id="d1-isw2.runtime.module.classpath">
+    <pathelement location="${d1-isw2.testoutput.dir}"/>
+    <pathelement location="${d1-isw2.output.dir}"/>
+    <pathelement location="${basedir}/json-20190722.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.d1-isw2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.d1-isw2">
+    <patternset refid="excluded.from.module.d1-isw2"/>
+  </patternset>
+  
+  <path id="d1-isw2.module.sourcepath">
+    <dirset dir="${module.d1-isw2.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.d1-isw2" depends="compile.module.d1-isw2.production,compile.module.d1-isw2.tests" description="Compile module D1-ISW2"/>
+  
+  <target name="compile.module.d1-isw2.production" description="Compile module D1-ISW2; production classes">
+    <mkdir dir="${d1-isw2.output.dir}"/>
+    <javac destdir="${d1-isw2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.d1-isw2}"/>
+      <bootclasspath refid="d1-isw2.module.bootclasspath"/>
+      <classpath refid="d1-isw2.module.production.classpath"/>
+      <src refid="d1-isw2.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.d1-isw2"/>
+    </javac>
+    
+    <copy todir="${d1-isw2.output.dir}">
+      <fileset dir="${module.d1-isw2.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.d1-isw2.tests" depends="compile.module.d1-isw2.production" description="compile module D1-ISW2; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.d1-isw2" description="cleanup module">
+    <delete dir="${d1-isw2.output.dir}"/>
+    <delete dir="${d1-isw2.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.d1-isw2" description="cleanup all"/>
+  
+  <target name="build" depends="init, clean, compile.module.d1-isw2" description="build all modules"/>
+  
+  <target name="all" depends="build" description="build all"/>
+</project>
