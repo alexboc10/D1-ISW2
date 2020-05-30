@@ -145,7 +145,7 @@ public class Project {
         statistics[0] = bdPerc.doubleValue();
 
         //Data mean
-        BigDecimal bdMean = BigDecimal.valueOf((double) (this.taggedTickets) / (double) monthNum);
+        BigDecimal bdMean = BigDecimal.valueOf((double) this.taggedTickets / (double) monthNum);
         bdMean = bdMean.setScale(2, RoundingMode.HALF_UP);
         statistics[1] = bdMean.doubleValue();
 
@@ -166,6 +166,7 @@ public class Project {
 
         logger.log(Level.FINE, "Extracting Commits");
 
+        this.taggedTickets = 0;
         for (Ticket ticket : this.tickets) {
 
             command.setCommand("git log --date=iso-strict --grep=" + ticket.getKey() + " -F --pretty=format:'%cd'END | sort -r", "/home/alex/code/ISW2/" + this.name);
@@ -175,11 +176,10 @@ public class Project {
                 continue;
             }
 
-            this.taggedTickets++;
-
             lines = output.split("END", 0);
 
             if (lines.length == 1) {
+                this.taggedTickets++;
                 ticket.setCommit(new Commit(LocalDate.parse(lines[0].substring(0,10))));
                 if (LocalDate.parse(lines[0].substring(0,10)).isBefore(this.startDate)) {
                     this.startDate = LocalDate.parse(lines[0].substring(0,10));
